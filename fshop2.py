@@ -33,7 +33,7 @@ class StockItem(object):  # (object define superclasse de maior nível)
         self.stock_ref = stock_ref
         self.__price = price
         self.color = color
-        self.__stock_level = stock_level = 0
+        self.__stock_level = 0
         self.__StockItem_version = 1
 
     """ propriedade com metodo acesso ao preco de estoque de 1 item instanciado """   
