@@ -33,6 +33,13 @@ import pickle # biblioteca de armazenamento de arquivos binários
 
 
 
+
+
+
+
+
+
+
 # Definição dos itens de menu principal
 '''Alan's Loja de Roupas
 
@@ -43,6 +50,16 @@ import pickle # biblioteca de armazenamento de arquivos binários
 5: Sair
 
 Digite sua opção: '''
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -203,6 +220,13 @@ Color: {4}'''
 
 
 
+
+
+
+
+
+
+
 class Dress(StockItem): 
     """ Subclasse de Stock Item """
     def __init__(self, stock_ref, price, color, pattern, size):  # construtor da classe               
@@ -232,6 +256,23 @@ Pattern: {1}
 Size: {2}'''
         # retorna o retorno do metodo str da superclasse e de atributos da subclasse
         return template.format(stock_details,self.pattern, self.size)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -285,6 +326,10 @@ Waist: {3}
 Size: {4}'''
         # retorna o retorno do metodo str da superclasse e de atributos da subclasse
         return template.format(stock_details,self.pattern, self.length, self.waist, self.size)
+
+
+
+
 
 
 
@@ -454,6 +499,27 @@ Size: {1}'''
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # prompt do menu mostrado para inclusão de itens
 menu = '''\033[H\033[J
 Create new stock item
@@ -598,6 +664,102 @@ sell_stock=btc.read_range_int('Sell stock: ',
 stock_item.sell_stock(sell_stock)
 
 print(stock_item, '\n')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class FashionShop: 
+    """ 
+    Componente de operação principal
+    Define principais operações da loja com estoque
+    criar nova loja, carregar arquivo de loja, armazenar item de estoque,
+    buscar item de estoque, listar itens em estoque
+    """
+    def __init__(self):
+        self.__stock_dictionary = {}
+
+
+    @staticmethod
+    def load(filename): 
+        """ Necessário criar método estático para carregamento
+            pois quando arquivo é carregado o objeto componente
+            instanciado da classe FashionShop ainda não existe. 
+            Por isso o método deve ser da "classe" e não do objeto. 
+            Por questão de organização, o método estático será colocado
+            sempre antes do construtor da classe. 
+            caso não consiga carregar o arquivo deve criar loja vazia. 
+         """
+        with open(filename,'rb') as input_file:  #abre conexão
+            result = pickle.load(input_file)  # carrega arquivo em result
+            return result  #retorna arquivo carregado
+
+
+    def save(self, filename): 
+        """  Salva fashion shop item em um dado arquivo
+             exceção deve ser gerada caso não consiga salvar. 
+         """
+        with open(filename,'wb') as out_file: # abre conexão
+            pickle.dump(self,out_file)  # descarrega objeto no arquivo
+        
+
+    def store_new_stock_item(self, item):
+        """ Cria novo item na fashion shop
+        Este item é indexado pelo atributo stock_ref
+        Gera execao se item já estiver armazenado na loja
+         """
+
+
+    def find_stock_item(self, stock_ref): 
+        """ Obtem item do stock
+        retorna nada se item não existir
+         """
+        return None
+
+
+    def __str__(self): 
+        """ Lista items da loja """
+        return ''
+
+
+shop = FashionShop()
+shop.save('FashionShop.pickle')
+
+loaded_shop = FashionShop.load('FashionShop.pickle')
+
+
+
+
+
 
 
 
