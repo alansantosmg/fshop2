@@ -96,6 +96,28 @@ class StockItem(object):  # (object define superclasse de maior nível)
         """ propriedade com metodo acesso a quantidade de estoque de 1 item instanciado """  
         return self.__stock_level
 
+
+    @property
+    def location(self):
+        """ 
+        Obtem o valor de atributo  definido e armazena em variavel. A seguir retorna a variável
+        Se não existir valor no atributo retorna nada. 
+        Sempre vem antes do setter
+        """
+        result = getattr(self, '_location', None)
+        return result
+
+
+    @location.setter        
+    def location(self, location):
+        """ 
+        Define um atributo via setter e recebe parametro de valor para este atributo.
+        Sempre vem depois do GET. Observar a ordem no programa.
+        """
+        self._location = location
+
+
+
     
     def check_version(self):
         """ classe na versão 1 não precisa atualizar nada"""
@@ -326,7 +348,6 @@ Style {2}
 Size: {3}'''
         # retorna o retorno do metodo str da superclasse e de atributos da subclasse
         return template.format(stock_details, self.pattern, self.style, self.size)
-
 
 
 
