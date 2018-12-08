@@ -130,12 +130,29 @@ class StockItem(object):  # (object define superclasse de maior nível)
     max_stock_add = 10   # Quantidade máxima de itens para estoque 
     
     def add_stock(self,count): 
-        """ Verifica se quantidade adicionada é menor que zero ou maior que máximo """
+        """ 
+        Verifica se quantidade adicionada é menor que zero ou maior que máximo.
+        Caso seja gera exceção.
+        Se quantidade estiver ok adiciona ao estoque.
+        """
         if count < 0 or count > StockItem.max_stock_add: 
-            raise Exception('Invalid Add amount') # exceção caso quantidade invalida
-        self.__stock_level = self.__stock_level + count # soma nova quantidade a existente
+            raise Exception('Invalid Add amount') 
+        self.__stock_level = self.__stock_level + count 
 
-
+    def sell_stock(self,count): 
+        """ 
+        metodo que retira itens do estoque.
+        se quantidade for maior que estoque, entra em loop e 
+        informa usuario a quantidade disponível em estoque.
+        Se a quantidade for menor gera exceção.
+        Se quantidade for subtrai do estoque.
+        """       
+        if count < 1: 
+            raise Exception('Invalid number of itens to sell')
+        if count > self.__stock_level: 
+            raise Exception('Not enough stock to sell')
+        self.__stock_level = self.__stock_level - count
+        
 
     
     def check_version(self):
@@ -564,8 +581,21 @@ elif item == 5:
                        size=size)
 
 print('\033[H\033[J') # limpa tela
-add_stock = btc.read_int('Add stock: ') # entra quantidade estoque
+
+#TODO: Esta acao deve ser colocada em item do menu principal a ser construido
+add_stock = btc.read_int('Add stock: ') # entra quantidade para adicionar estoque
 stock_item.add_stock(add_stock) # chama metodo que adiciona quantidade no estoque
+
+print(stock_item, '\n')
+
+#TODO: Esta ação deve ser colocada em item do menu principal a ser construido
+# diminui quantidade de estoque do item
+# mínimo 1 
+# maximo é a quantidade de estoque no item
+sell_stock=btc.read_range_int('Sell stock: ', 
+                                min_value=1, 
+                                max_value=stock_item.stock_level) # entra quantidade a subtrair do estoque
+stock_item.sell_stock(sell_stock)
 
 print(stock_item, '\n')
 
