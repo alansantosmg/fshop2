@@ -29,7 +29,8 @@ Fshop2.pickle: arquivo de dados da versão PT-BR
 - Cria loja (shop), carrega ou salva arquivo de loja
 - Carrega menu e funções principais
 
-##### Classe Fashionshop, carrega funções da loja como adicionar, procurar, vender item.
+##### Classe Fashionshop
+- Carrega funções da loja como adicionar, procurar, vender item.
 
 ##### Classes de dados: 
 - item de estoque(pai) 
