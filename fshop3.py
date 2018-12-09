@@ -97,7 +97,7 @@ class StockItem(object):  # (object define superclasse de maior nível)
     @property
     def item_name(self): 
         """ Retorna um valor estático guardado na propriedade (sem atributo)"""
-        return 'Stock Item' # o valor retornado será o nome do objeto da classe
+        return 'Item de estoque' # o valor retornado será o nome do objeto da classe
 
     @property
     def price(self): 
@@ -141,7 +141,7 @@ class StockItem(object):  # (object define superclasse de maior nível)
         Se quantidade estiver ok adiciona ao estoque.
         """
         if count < 0 or count > StockItem.max_stock_add: 
-            raise Exception('Invalid Add amount') 
+            raise Exception('Quantidade adicionada inválida!') 
         self.__stock_level = self.__stock_level + count 
 
     def sell_stock(self,count): 
@@ -153,9 +153,9 @@ class StockItem(object):  # (object define superclasse de maior nível)
         Se quantidade for subtrai do estoque.
         """       
         if count < 1: 
-            raise Exception('Invalid number of itens to sell')
+            raise Exception('Quantidade inválida de itens para vender!')
         if count > self.__stock_level: 
-            raise Exception('Not enough stock to sell')
+            raise Exception('Quantidade insuficiente!')
         self.__stock_level = self.__stock_level - count
         
 
@@ -168,11 +168,11 @@ class StockItem(object):  # (object define superclasse de maior nível)
     def __str__(self):
         """ Metodo de impressao do objeto da classe """ 
         template ='''
-Stock Reference: {0}
-Type: {1}
-price: {2}
-Stock Level: {3}
-Color: {4}'''
+Referência de estoque: {0}
+Tipo: {1}
+preço: {2}
+Quantidade em estoque: {3}
+Cor: {4}'''
         return template.format(self.stock_ref, self.item_name, 
                                 self.price, self.stock_level, self.color)
 
@@ -228,7 +228,7 @@ class Dress(StockItem):
     @property # esta propriedade está sobrescrevendo (overriding) a da superclasse
     def item_name(self): 
         """ Retorna um valor estático guardado na propriedade (sem variavel atributo)"""
-        return 'Dress' # a string retornada será o nome do objeto da classe
+        return 'vestido' # a string retornada será o nome do objeto da classe
 
 
     def check_version(self):
@@ -242,8 +242,8 @@ class Dress(StockItem):
         #Exemplo de polimorfismo: Mescla atributos e métodos da super e subclasse         
         stock_details = super().__str__()  #Guarda retorno do método str da superclasse
         template ='''{0}
-Pattern: {1}
-Size: {2}'''
+Padrão: {1}
+Tamanho: {2}'''
         # retorna o retorno do metodo str da superclasse e de atributos da subclasse
         return template.format(stock_details,self.pattern, self.size)
 
@@ -297,7 +297,7 @@ class Pants(StockItem):
     @property # esta propriedade está sobrescrevendo (overriding) a da superclasse
     def item_name(self): 
         """ Retorna um valor estático guardado na propriedade (sem variavel atributo)"""
-        return 'Pants' # a string retornada será o nome do objeto da classe
+        return 'Calça (tecido)' # a string retornada será o nome do objeto da classe
     
     def check_version(self):
         """ classe na versão 1 não precisa atualizar nada"""
@@ -310,10 +310,10 @@ class Pants(StockItem):
         #Exemplo de polimorfismo: Mescla atributos e métodos da super e subclasse         
         stock_details = super().__str__()  #Guarda retorno do método str da superclasse
         template ='''{0}
-Pattern: {1}
-Length: {2}
-Waist: {3}
-Size: {4}'''
+Padrão: {1}
+Comprimento: {2}
+Cintura: {3}
+Tamanho: {4}'''
         # retorna o retorno do metodo str da superclasse e de atributos da subclasse
         return template.format(stock_details,self.pattern, self.length, self.waist, self.size)
 
@@ -354,7 +354,7 @@ class Jeans(Pants):
     @property # esta propriedade está sobrescrevendo (overriding) a da superclasse
     def item_name(self): 
         """ Retorna um valor estático guardado na propriedade (sem variavel atributo)"""
-        return 'Jeans' # a string retornada será o nome do objeto da classe
+        return 'Calça Jeans' # a string retornada será o nome do objeto da classe
     
     def check_version(self): 
         """ classe na versão 1 não precisa atualizar nada"""
@@ -367,7 +367,7 @@ class Jeans(Pants):
         #Exemplo de polimorfismo: Mescla atributos e métodos da super e subclasse         
         stock_details = super().__str__()  #Guarda retorno do método str da superclasse
         template ='''{0}
-Style: {1}
+Estilo: {1}
 '''
         # retorna o retorno do metodo str da superclasse e de atributos da subclasse
         return template.format(stock_details,self.style)
@@ -403,7 +403,7 @@ class Blouses(StockItem):
     @property # (overriding) a da superclasse
     def item_name(self): 
         """ Retorna um valor estático  (sem variavel atributo)"""
-        return 'Blouse' # a string retornada será o nome do objeto da classe
+        return 'Blusa feminina' # a string retornada será o nome do objeto da classe
 
     def check_version(self):
         """" classe na versão 1 não precisa atualizar nada"""
@@ -415,9 +415,9 @@ class Blouses(StockItem):
         # Mescla atributos e métodos da super e subclasse         
         stock_details = super().__str__()  #Guarda retorno do método str da superclasse
         template ='''{0}
-Pattern: {1}
-Style {2}
-Size: {3}'''
+Padrão: {1}
+Estilo: {2}
+Tamanho: {3}'''
         # retorna o retorno do metodo str da superclasse e de atributos da subclasse
         return template.format(stock_details, self.pattern, self.style, self.size)
 
@@ -456,7 +456,7 @@ class Hats(StockItem): # subclasse de stockitem
     @property # esta propriedade está sobrescrevendo (overriding) a da superclasse
     def item_name(self): 
         """ Retorna um valor estático guardado na propriedade (sem variavel atributo)"""
-        return 'Hat' # a string retornada será o nome do objeto da classe   
+        return 'Chapéu' # a string retornada será o nome do objeto da classe   
 
     def check_version(self):
         """ classe na versão 1 não precisa atualizar nada"""
@@ -468,7 +468,7 @@ class Hats(StockItem): # subclasse de stockitem
         #Exemplo de polimorfismo: Mescla atributos e métodos da super e subclasse         
         stock_details = super().__str__()  #Guarda retorno do método str da superclasse
         template ='''{0}
-Size: {1}'''
+Tamanho: {1}'''
         # retorna o retorno do metodo str da superclasse e de atributos da subclasse
         return template.format(stock_details, self.size)
 
@@ -514,16 +514,6 @@ Size: {1}'''
 
 
 
-
-#print(stock_item, '\n')
-
-
-
-
-
-
-
-#print(stock_item, '\n')
 
 
 
@@ -617,7 +607,7 @@ class FashionShop:
         """ Lista items da loja """
         stock = map(str, self.__stock_dictionary.values()) # mapeia valores de string do dicionario
         stock_list = '\n'.join(stock) #imprime fila de valores mapeados 1 por linha
-        template = '''Itens in Stock 
+        template = '''Itens de estoque 
 {0}
 ''' 
         return template.format(stock_list)  #formata e retorna lista de items do dicionário
@@ -640,8 +630,8 @@ class FashionShopShellApplication:
         try: 
             self.__shop = FashionShop.load(filename)
         except: 
-            print('File not found.')  # Se não achar arquivo no disco avisa usuario
-            print('Creating an empty Fashion Shop') 
+            print('Arquivo não encontrado.')  # Se não achar arquivo no disco avisa usuario
+            print('Criando novo Fashion Shop.') 
             self.__shop = FashionShop() #inicia loja vazia
 
     def sell_stock(self):      
@@ -651,73 +641,73 @@ class FashionShopShellApplication:
         Não permite vender mais itens do que já existe no estoque
        
         """
-        print('Sell Item')
+        print('Vender item')
 
         # le entrada do usuario sobre item que quer vender
-        item_stock_ref = btc.read_text('Enter the stock reference: ')
+        item_stock_ref = btc.read_text('Digite referência de estoque: ')
         
         # busca entrada do usuário no dicionario com metodo find
         item = self.__shop.find_stock_item(item_stock_ref)
 
         # se não encontrar nada retorna None
         if item == None : 
-            print('This item was not found')
+            print('Este item de estoque não foi encontrado.')
             return
 
         # se encontrar item no dicionario inicia venda
-        print('selling')
+        print('Venda')
         print(item)
 
         # se estoque for zero, retorna
         if item.stock_level == 0:
-            print ('There are none in stock')
+            print ('Referência de estoque não encontrada')
             return
 
         # se quantidade for menor que zero ou maior que maximo
         # solicita novo numero via funcao de BTC
-        number_sold = btc.read_range_int(prompt='Sell stock (ou zero para sair): ', 
+        number_sold = btc.read_range_int(prompt='Vender item (ou zero para sair): ', 
                                 min_value=0, 
                                 max_value=item.stock_level) # entra quantidade a subtrair do estoque
         
         # se quantidade for zero retorna
         if number_sold == 0: 
-            print('Sell item abandoned')
+            print('Venda cancelada.')
             return
         # se quantidade for maior que zero e menor/igual que max_value efetua venda
         item.sell_stock(number_sold)
 
         # informa que item foi vendido
-        print('Items sold')
+        print('Item vendidos.')
 
     def create_new_stock_item(self):
 
         # prompt do menu mostrado para inclusão de itens
         menu = '''
-        Create new stock item
+        Criar novo item de estoque
 
-        1: Dress
-        2: Pants
-        3: Hat
-        4: Blouse
+        1: Vestido
+        2: Calça
+        3: Chapéu
+        4: Blusa
         5: Jeans
 
-        What kind of item do you want to add: '''
+        Digite a opção de item para inclusão: '''
 
         """ Definição das ações dos itens de menu """
         # receber entrada do usuario p/ menu de inclusao de itens
         item = btc.read_range_int(prompt=menu, min_value=1, max_value=5)
 
         if item == 1: 
-            print('Creating Dress')
+            print('Criando vestido')
             
             # recebe entrada do usuario para item
-            stock_ref = btc.read_text('Enter stock reference: ')
-            price = btc.read_range_float(prompt = 'Entre price: ', 
+            stock_ref = btc.read_text('Digite referência de estoque: ')
+            price = btc.read_range_float(prompt = 'Digite preço: ', 
                                         min_value = StockItem.min_price, 
                                         max_value = StockItem.max_price)
-            color = btc.read_text('Enter color: ')
-            pattern = btc.read_text('Enter pattern: ')
-            size = btc.read_text('Enter size: ')
+            color = btc.read_text('Digite cor: ')
+            pattern = btc.read_text('Digite padrão: ')
+            size = btc.read_text('Digite tamanho: ')
 
             # cria objeto stock_item do tipo Dress
             # e usa entrada de usuaro como parametro
@@ -728,18 +718,18 @@ class FashionShopShellApplication:
                             size = size)
 
         elif item ==2: 
-            print('Creating pants')
+            print('Criando calça')
 
             # recebe entrada do usuario para item
-            stock_ref = btc.read_text('Enter stock reference: ')
-            price = btc.read_range_float(prompt = 'Enter price: ', 
+            stock_ref = btc.read_text('Digite referência de estoque: ')
+            price = btc.read_range_float(prompt = 'Digite preço: ', 
                                         min_value = StockItem.min_price,
                                         max_value = StockItem.max_price)
-            color = btc.read_text('Enter color: ')
-            pattern = btc.read_text('Enter pattern: ')
-            waist = btc.read_int('Enter waist: ')
-            length = btc.read_int('Enter length: ')
-            size = btc.read_text('Enter size: ')
+            color = btc.read_text('Digite cor: ')
+            pattern = btc.read_text('Digite padrão: ')
+            waist = btc.read_int('Digite cintura: ')
+            length = btc.read_int('Digite comprimento: ')
+            size = btc.read_text('Digite tamanho: ')
 
             # cria objeto stock_item do tipo Pants
             # usa entrada de usuário como parametros
@@ -752,15 +742,15 @@ class FashionShopShellApplication:
                             size = size)
 
         elif item == 3: 
-            print('Creating hat')
+            print('Criando chapéu')
 
             #recebe entrada de usuario para item
-            stock_ref = btc.read_text('Enter stock reference: ')
-            price = btc.read_range_float(prompt='Enter price: ',
+            stock_ref = btc.read_text('Digite referência de estoque: ')
+            price = btc.read_range_float(prompt='Digite preço: ',
                                         min_value=StockItem.min_price, 
                                         max_value=StockItem.max_price)
-            color = btc.read_text('Enter color: ')
-            size = btc.read_text('Enter size: ')
+            color = btc.read_text('Digite cor: ')
+            size = btc.read_text('Digite tamanho: ')
 
             # cria objeto stock_item da classe hats
             # usa entrada de usuários como parametro do objeto
@@ -770,17 +760,17 @@ class FashionShopShellApplication:
                             size=size)
 
         elif item == 4:
-            print('Creating Blouse')
+            print('Criando blusa')
 
             # recebe entrada de usuario para item
-            stock_ref = btc.read_text('Enter stock reference: ')
-            price = btc.read_range_float(prompt='Enter price: ',
+            stock_ref = btc.read_text('Digite referência de estoque: ')
+            price = btc.read_range_float(prompt='Digite preço: ',
                                         min_value=StockItem.min_price,
                                         max_value=StockItem.max_price)
-            color = btc.read_text('Enter color: ')
-            pattern = btc.read_text('Enter pattern: ')
-            style = btc.read_text('Enter style: ')
-            size = btc.read_text('Enter size: ')
+            color = btc.read_text('Digite cor: ')
+            pattern = btc.read_text('Digite padrão: ')
+            style = btc.read_text('Digite estilo: ')
+            size = btc.read_text('Digite tamanho: ')
 
             # cria objeto stock item da classe blouse
             # usa entrada de usuaŕio como parametros do objeto
@@ -792,19 +782,19 @@ class FashionShopShellApplication:
                                 size=size) 
 
         elif item == 5: 
-            print('Creating Jeans')
+            print('Criando Jeans')
 
             # recebe entrada de usuario para item
-            stock_ref = btc.read_text('Enter stock reference: ')
-            price = btc.read_range_float(prompt='Enter price: ', 
+            stock_ref = btc.read_text('Digite referência de estoque: ')
+            price = btc.read_range_float(prompt='Digite preço: ', 
                                         min_value=StockItem.min_price,
                                         max_value=StockItem.max_price)
-            color = btc.read_text('Enter color: ')
-            pattern = btc.read_text('Enter pattern: ')
-            waist = btc.read_int('Enter waist: ')
-            length = btc.read_int('Enter length: ')
-            style = btc.read_text('Enter style: ')
-            size = btc.read_text('Size: ')
+            color = btc.read_text('Digite cor: ')
+            pattern = btc.read_text('Digite padrão: ')
+            waist = btc.read_int('Digite cintura: ')
+            length = btc.read_int('Digite comprimento: ')
+            style = btc.read_text('Digite estilo: ')
+            size = btc.read_text('Digite tamanho: ')
 
             # cria objeto jeans
             # usa valores de entrada como parametro do objeto
@@ -823,30 +813,30 @@ class FashionShopShellApplication:
 
 
     def add_stock(self):
-        print('add Item')
+        print('Adicionar item')
 
         # le entrada do usuario sobre item que quer vender
-        item_stock_ref = btc.read_text('Enter the stock reference: ')
+        item_stock_ref = btc.read_text('Digite referência de estoque: ')
                 
         # busca entrada do usuário no dicionario com metodo find
         item = self.__shop.find_stock_item(item_stock_ref)
 
         # se não encontrar nada retorna None
         if item == None : 
-            print('This item was not found')
+            print('Referência não encontrada')
             return
 
         # se encontrar item no dicionario inicia reposicao de estoque
-        print('Adding stock')
+        print('Adicionando quantidade ao item de estoque')
         print(item)
 
         # se quantidade for menor que zero ou maior que maximo
         # solicita novo numero via funcao de BTC
-        number_add = btc.read_int('Add stock (ou zero para sair): ')
+        number_add = btc.read_int('Adicione quantidade (ou zero para sair): ')
                 
         # se quantidade for zero retorna
         if number_add == 0: 
-            print('Sell item abandoned')
+            print('Inclusão cancelada')
             return
         # se quantidade for maior que zero e menor/igual que max_value efetua venda
         item.add_stock(number_add)
@@ -863,14 +853,14 @@ Escolha opção que quer listar: '''
         command = btc.read_range_int(prompt, min_value=1, max_value=2)
         if command == 1: 
             # le entrada do usuario sobre item que quer vender
-            item_stock_ref = btc.read_text('Enter the stock reference: ')
+            item_stock_ref = btc.read_text('Entre referência de estoque: ')
                 
             # busca entrada do usuário no dicionario com metodo find
             item = self.__shop.find_stock_item(item_stock_ref)
 
             # se não encontrar nada retorna None
             if item == None : 
-                print('This item was not found')
+                print('Referência não encontrada')
                 return
             # se item for encontrado, mostra item
             print('Item de estoque:\n')
@@ -917,11 +907,11 @@ Digite sua opção: '''
                 self.do_report()
             elif command == 5: 
                 self.__shop.save(FashionShopShellApplication.__filename) 
-                print('Shop data saved')
+                print('Dados da loja salvos em arquivo')
                 break
 
 
-ui = FashionShopShellApplication('fshop2.pickle')
+ui = FashionShopShellApplication('fshop3.pickle')
 ui.main_menu()
 
 
@@ -953,52 +943,6 @@ ui.main_menu()
 
 
 
-# Definição dos itens de menu principal
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# testes de classe substituidos pela instrucao print(stock_item) do menu item
-'''
-v = Dress(stock_ref ='d0001', price=10, color='red', pattern='circulos', size='m')
-w = Pants(stock_ref ='d0001', price=10, color='red', pattern='circulos', waist='m', length=10, size='m')
-x = Jeans(stock_ref ='d0001', price=10, color='red', pattern='circulos', waist='m', length=10, style='cut', size='m')
-y = Blouses(stock_ref ='d0001', price=120, color='red', pattern='circulos', style='m', size='m')
-z = Hats(stock_ref ='d0001', price=10, color='red', size='m')
-
-'''
-
-"""
-test_print ='''Teste de impressão de classes)
-
-{0}
-
-{1}
-
-{2}
-
-{3}
-
-{4}'''
-
-print(test_print.format(v,w,x,y,z))
-"""
