@@ -24,6 +24,7 @@ Fshop2.pickle: arquivo de dados da versão US.
 Fshop2.pickle: arquivo de dados da versão PT-BR
 
 ### Arquitetura: 
+
 Classe componente de usuário FashionShopShellApplication
 - Cria loja (shop), carrega ou salva arquivo de loja
 - Carrega menu e funções principais
@@ -34,5 +35,6 @@ Classes de dados:
 - item de estoque(pai) 
 - Vestido, calça, jeans(filho de calça), blusa, chapeu
 
-Documentação: O código fonte está 100% comentado em PT-BR nas duas versões, para fins de estudo. 
+###Documentação: 
+O código fonte está 100% comentado em PT-BR nas duas versões, para fins de estudo. 
 
