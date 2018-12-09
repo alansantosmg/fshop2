@@ -16,7 +16,7 @@ como herança, abstração, sobrecarga, polimorfismo.
 - Listar 1 item de estoque.
 - Listar todos itens de estoque.
 
-### componentes: 
+### Componentes: 
 módulo BTC com funções que permite validação de ranges, e tipos. 
 Fshop2 - Versão com interface de usuário em inglês US. 
 Fshop3 - Versão com interface de usuário em PT-BR
