@@ -40,18 +40,6 @@ import pickle # biblioteca de armazenamento de arquivos binários
 
 
 
-# Definição dos itens de menu principal
-'''Alan's Loja de Roupas
-
-1: Criar novo item de estoque
-2: Adicionar estoque a item existente
-3: Vender estoque
-4: Relatório de estoque
-5: Sair
-
-Digite sua opção: '''
-
-
 
 
 
@@ -187,6 +175,8 @@ Stock Level: {3}
 Color: {4}'''
         return template.format(self.stock_ref, self.item_name, 
                                 self.price, self.stock_level, self.color)
+
+
 
 
 
@@ -521,7 +511,7 @@ Size: {1}'''
 
 
 # prompt do menu mostrado para inclusão de itens
-menu = '''\033[H\033[J
+menu = '''
 Create new stock item
 
 1: Dress
@@ -648,6 +638,8 @@ elif item == 5:
 
 print('\033[H\033[J') # limpa tela
 
+
+
 #TODO: Esta acao deve ser colocada em item do menu principal a ser construido
 add_stock = btc.read_int('Add stock: ') # entra quantidade para adicionar estoque
 stock_item.add_stock(add_stock) # chama metodo que adiciona quantidade no estoque
@@ -658,10 +650,10 @@ print(stock_item, '\n')
 # diminui quantidade de estoque do item
 # mínimo 1 
 # maximo é a quantidade de estoque no item
-sell_stock=btc.read_range_int('Sell stock: ', 
-                                min_value=1, 
-                                max_value=stock_item.stock_level) # entra quantidade a subtrair do estoque
-stock_item.sell_stock(sell_stock)
+
+
+
+
 
 print(stock_item, '\n')
 
@@ -732,34 +724,173 @@ class FashionShop:
             pickle.dump(self,out_file)  # descarrega objeto no arquivo
         
 
-    def store_new_stock_item(self, item):
+    def store_new_stock_item(self, stock_item):
         """ Cria novo item na fashion shop
         Este item é indexado pelo atributo stock_ref
         Gera execao se item já estiver armazenado na loja
          """
+        if stock_item.stock_ref in self.__stock_dictionary: #verfica se chave do indice existe no dicionário 
+            raise Exception('Item já existe') # excecao se item existir no dicionário
+        self.__stock_dictionary[stock_item.stock_ref] = stock_item #se não existir grava, usando stock_ref como indice
+        
 
-
-    def find_stock_item(self, stock_ref): 
+    def find_stock_item(self, stock_ref):  
         """ Obtem item do stock
         retorna nada se item não existir
+             
          """
-        return None
+        if stock_ref in self.__stock_dictionary:  # busca uma chave no indice do dicionario
+            return self.__stock_dictionary[stock_ref]  # se existir retorna item da chave
+        else:
+            return None
 
 
     def __str__(self): 
         """ Lista items da loja """
-        return ''
-
-
-shop = FashionShop()
-shop.save('FashionShop.pickle')
-
-loaded_shop = FashionShop.load('FashionShop.pickle')
-
-
+        stock = map(str, self.__stock_dictionary.values()) # mapeia valores de string do dicionario
+        stock_list = '\n'.join(stock) #imprime fila de valores mapeados 1 por linha
+        template = '''Itens in Stock 
+{0}
+''' 
+        return template.format(stock_list)  #formata e retorna lista de items do dicionário
 
 
 
+
+
+
+
+
+class FashionShopShellApplication: 
+    """ Classe de interface do usuario """
+    def __init__(self,filename): 
+
+        #recebe parametro filename e guarda em atributo privado
+        FashionShopShellApplication.__filename = filename
+        
+        #tenta carregar loja usando nome de arquivo guardado no atributo 
+        try: 
+            self.__shop = FashionShop.load(filename)
+        except: 
+            print('File not found.')  # Se não achar arquivo no disco avisa usuario
+            print('Creating an empty Fashion Shop') 
+            self.__shop = FashionShop() #inicia loja vazia
+
+    def sell_stock(self):      
+        """ 
+        Vende uma quantidade de item do stoque. 
+        Procura por um item e le numero de itens vendidos
+        Não permite vender mais itens do que já existe no estoque
+       
+        """
+        print('Sell Item')
+
+        # le entrada do usuario sobre item que quer vender
+        item_stock_ref = btc.read_text('Enter the stock reference: ')
+        
+        # busca entrada do usuário no dicionario com metodo find
+        item = self.__shop.find_stock_item(item_stock_ref)
+
+        # se não encontrar nada retorna None
+        if item == None : 
+            print('This item was not found')
+            return
+
+        # se encontrar item no dicionario inicia venda
+        print('selling')
+        print(item)
+
+        # se estoque for zero, retorna
+        if item.stock_level == 0:
+            print ('There are none in stock')
+            return
+
+        # se quantidade for menor que zero ou maior que maximo
+        # solicita novo numero via funcao de BTC
+        number_sold = btc.read_range_int(prompt='Sell stock (ou zero para sair): ', 
+                                min_value=0, 
+                                max_value=item.stock_level) # entra quantidade a subtrair do estoque
+        
+        # se quantidade for zero retorna
+        if number_sold == 0: 
+            print('Sell item abandoned')
+            return
+        # se quantidade for maior que zero e menor/igual que max_value efetua venda
+        item.sell_stock(number_sold)
+
+        # informa que item foi vendido
+        print('Items sold')
+
+    def create_new_stock_item(self):
+
+
+
+
+
+        
+
+
+
+    def main_menu(self):  #metodo que carrega menu principal
+        prompt = '''Alan's Loja de Roupas
+
+1: Criar novo item de estoque
+2: Adicionar estoque a item existente
+3: Vender estoque
+4: Relatório de estoque
+5: Sair
+
+Digite sua opção: '''
+
+        while(True):
+            command = btc.read_range_int(prompt, 1, 5)
+            if command == 1:
+                self.create_new_stock_item()
+            elif command ==2: 
+                self.add_stock()
+            elif command == 3: 
+                self.sell_stock()
+            elif command == 4: 
+                self.do_report()
+            elif command == 5: 
+                self.__shop.save(FashionShopShellApplication.__filename) 
+                print('Shop data saved')
+                break
+
+
+ui = FashionShopShellApplication('dressshop1.pickle')
+ui.main_menu()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Definição dos itens de menu principal
 
 
 
