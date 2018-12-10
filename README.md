@@ -15,6 +15,8 @@ como herança, abstração, sobrecarga, polimorfismo.
 - Define quantidade máxima de item em estoque (atualmente hardcoded).
 - Listar 1 item de estoque.
 - Listar todos itens de estoque.
+- Adicionar multiplas tags (etiquetas) para localização rápida de itens de estoque
+- Buscar itens de estoque por tags (uma ou mais).
 
 ### Componentes
 
