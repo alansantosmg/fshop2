@@ -9,8 +9,8 @@ como herança, abstração, sobrecarga, polimorfismo.
 - Criar arquivo de dados e armazenar dados de nova loja, caso arquivo não exista.
 - Carregar arquivo da loja com itens de estoque caso arquivo de dados exista.
 - Criar itens de estoque: vestidos, calças (tecido), chapéus, Jeans, blusas.
-- Adicionar (buy) quantidade aos itens de estoque. 
-- Remover (sell) quantidade dos itens de estoque. 
+- Adicionar (buy) quantidade aos itens de estoque.
+- Remover (sell) quantidade dos itens de estoque.
 - Define preço mínimo e máximo para itens da loja.  (atualmente (hardcoded).
 - Define quantidade máxima de item em estoque (atualmente hardcoded).
 - Listar 1 item de estoque.
