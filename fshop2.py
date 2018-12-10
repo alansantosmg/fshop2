@@ -84,14 +84,15 @@ class StockItem(object):  # (object define superclasse de maior nível)
     min_price = 10
     max_price = 10000
 
-    def __init__(self, stock_ref, price, color):  # construtor da classe
+    def __init__(self, stock_ref, price, color,tags):  # construtor da classe
         self.stock_ref = stock_ref
         self.__price = price
         self.color = color
         self.__stock_level = 0
         self.__StockItem_version = 1
+        self.tags = tags
 
-        
+
 
 
     @property
@@ -158,7 +159,6 @@ class StockItem(object):  # (object define superclasse de maior nível)
             raise Exception('Not enough stock to sell')
         self.__stock_level = self.__stock_level - count
         
-
     
     def check_version(self):
         """ classe na versão 1 não precisa atualizar nada"""
@@ -172,14 +172,22 @@ Stock Reference: {0}
 Type: {1}
 price: {2}
 Stock Level: {3}
-Color: {4}'''
+Color: {4}
+tags {5}'''
         return template.format(self.stock_ref, self.item_name, 
-                                self.price, self.stock_level, self.color)
+                                self.price, self.stock_level, self.color,self.tags)
 
+    @staticmethod  # chamado pela classe não pela instancia
+    def get_tag_set_from_text(tag_text):
+        """ Converte valores entrados pelo usuário em tags """   
+        tag_text = str.lower(tag_text) #converte strings para minusculo
+        tag_list = str.split(tag_text, sep=',') # tranforma strings em lista, usando virgula como delimitador
+        tag_list = map(str.strip,tag_list) # aplica metodo str.strip p/ tirar espaços em branco dos itens da lista
+        return set(tag_list) #converte a lista em sets - para não ter elementos repetidos
 
+  
 
-
-
+    
 
 
 
@@ -219,8 +227,8 @@ Color: {4}'''
 
 class Dress(StockItem): 
     """ Subclasse de Stock Item """
-    def __init__(self, stock_ref, price, color, pattern, size):  # construtor da classe               
-        super().__init__(stock_ref, price, color) # herança do construtor da superclasse           
+    def __init__(self, stock_ref, price, color, tags, pattern, size):  # construtor da classe               
+        super().__init__(stock_ref=stock_ref, price=price, color=color,tags=tags) # herança do construtor da superclasse           
         self.pattern = pattern
         self.size = size
         self.__Dress_version = 1
@@ -286,8 +294,8 @@ Size: {2}'''
 
 class Pants(StockItem):
     """ Subclasse de StockItem """
-    def __init__(self, stock_ref, price, color, pattern, length, waist, size):
-        super().__init__(stock_ref, price, color) # heranca do contrutor da superclase 
+    def __init__(self, stock_ref, price, color, tags, pattern, length, waist, size):
+        super().__init__(stock_ref=stock_ref,price=price,color=color,tags=tags) # heranca do contrutor da superclase 
         self.pattern = pattern
         self.length = length
         self.waist = waist
@@ -346,8 +354,15 @@ Size: {4}'''
 
 class Jeans(Pants):
     """ Subclasse de StockItem """
-    def __init__(self, stock_ref, price, color, pattern, length, size, waist, style):
-        super().__init__(stock_ref, price, color,pattern,length,waist,size) # heranca do contrutor da superclase 
+    def __init__(self, stock_ref, price, color, tags, pattern, length, size, waist, style):
+        super().__init__(stock_ref=stock_ref,
+                        price=price,
+                        color=color,
+                        tags=tags,
+                        pattern=pattern,
+                        length=length,
+                        size=size,
+                        waist=waist) # heranca do contrutor da superclase 
         self.style = style
         self.__Jeans_version = 1
     
@@ -393,8 +408,8 @@ Style: {1}
 
 
 class Blouses(StockItem):
-    def __init__(self, stock_ref, price, color, size, pattern, style):
-        super().__init__(stock_ref, price, color)
+    def __init__(self, stock_ref, price, color, tags, size, pattern, style):
+        super().__init__(stock_ref=stock_ref, price=price, color=color, tags=tags)
         self.pattern = pattern
         self.style = style
         self.size = size
@@ -448,8 +463,8 @@ Size: {3}'''
 
 
 class Hats(StockItem): # subclasse de stockitem
-    def __init__(self, stock_ref, price, color, size):  # construtor       
-        super().__init__(stock_ref, price, color) # herda construtor de StockItem
+    def __init__(self, stock_ref, price, color, tags, size):  # construtor       
+        super().__init__(stock_ref=stock_ref, price=price, color=color,tags=tags) # herda construtor de StockItem
         self.size = size
         self.__hats_version = 1
 
@@ -513,17 +528,6 @@ Size: {1}'''
 
 
 
-
-
-#print(stock_item, '\n')
-
-
-
-
-
-
-
-#print(stock_item, '\n')
 
 
 
@@ -611,6 +615,20 @@ class FashionShop:
             return self.__stock_dictionary[stock_ref]  # se existir retorna item da chave
         else:
             return None
+
+
+
+    def find_matching_with_tags(self, search_tags): 
+        """ Retorna item de estoque que contem tags procuradas (subset of tag_list) """
+
+        def match_tags(item):
+            """ Retorna  as tags do item contem as tags procuradas  """
+            # compara tags fornecidas pelo usuário com tags do item
+            return search_tags.issubset(item.tags)
+
+        # retorna a filtragem do que foi encontrado por match_tags dentro do dicionario
+        return filter(match_tags,self.__stock_dictionary.values())
+
 
 
     def __str__(self): 
@@ -719,13 +737,17 @@ class FashionShopShellApplication:
             pattern = btc.read_text('Enter pattern: ')
             size = btc.read_text('Enter size: ')
 
+            tag_string = btc.read_text('Enter tags (separated by commas): ') #entra dados
+            tag_string = StockItem.get_tag_set_from_text(tag_string)
+
             # cria objeto stock_item do tipo Dress
             # e usa entrada de usuaro como parametro
             stock_item = Dress(stock_ref = stock_ref, 
                             price = price,
                             color = color,
                             pattern = pattern,
-                            size = size)
+                            size = size,
+                            tags = tag_string)
 
         elif item ==2: 
             print('Creating pants')
@@ -741,11 +763,17 @@ class FashionShopShellApplication:
             length = btc.read_int('Enter length: ')
             size = btc.read_text('Enter size: ')
 
+            tag_string = btc.read_text('Enter tags (separated by commas): ') #entra dados
+            tag_string = StockItem.get_tag_set_from_text(tag_string) # formata tags
+
+
+
             # cria objeto stock_item do tipo Pants
             # usa entrada de usuário como parametros
             stock_item = Pants(stock_ref = stock_ref,
                             price = price, 
                             color = color,
+                            tags = tag_string,
                             pattern = pattern,
                             waist = waist, 
                             length = length,
@@ -762,11 +790,16 @@ class FashionShopShellApplication:
             color = btc.read_text('Enter color: ')
             size = btc.read_text('Enter size: ')
 
+            tag_string = btc.read_text('Enter tags (separated by commas): ') #entra dados
+            tag_string = StockItem.get_tag_set_from_text(tag_string) # formata tags
+
+
             # cria objeto stock_item da classe hats
             # usa entrada de usuários como parametro do objeto
             stock_item = Hats(stock_ref=stock_ref,
                             price=price,
                             color=color,
+                            tags = tag_string,
                             size=size)
 
         elif item == 4:
@@ -782,11 +815,16 @@ class FashionShopShellApplication:
             style = btc.read_text('Enter style: ')
             size = btc.read_text('Enter size: ')
 
+            tag_string = btc.read_text('Enter tags (separated by commas): ') #entra dados
+            tag_string = StockItem.get_tag_set_from_text(tag_string) # formata tags
+
+
             # cria objeto stock item da classe blouse
             # usa entrada de usuaŕio como parametros do objeto
             stock_item = Blouses(stock_ref=stock_ref, 
                                 price=price,
                                 color=color,
+                                tags = tag_string,
                                 pattern=pattern,
                                 style=style,
                                 size=size) 
@@ -806,11 +844,16 @@ class FashionShopShellApplication:
             style = btc.read_text('Enter style: ')
             size = btc.read_text('Size: ')
 
+            tag_string = btc.read_text('Enter tags (separated by commas): ') #entra dados
+            tag_string = StockItem.get_tag_set_from_text(tag_string) # formata tags
+
+
             # cria objeto jeans
             # usa valores de entrada como parametro do objeto
             stock_item = Jeans(stock_ref=stock_ref, 
                             price=price, 
                             color=color,
+                            tags = tag_string,
                             pattern=pattern,
                             waist=waist,
                             length=length,
@@ -857,10 +900,11 @@ class FashionShopShellApplication:
         prompt ='''
 1: Listar item de estoque
 2: Listar todos itens de estoque
+3: Buscar item de estoque por tags
 
 Escolha opção que quer listar: '''
 
-        command = btc.read_range_int(prompt, min_value=1, max_value=2)
+        command = btc.read_range_int(prompt, min_value=1, max_value=3)
         if command == 1: 
             # le entrada do usuario sobre item que quer vender
             item_stock_ref = btc.read_text('Enter the stock reference: ')
@@ -881,7 +925,30 @@ Escolha opção que quer listar: '''
             # imprime objeto FashionShop.__shop
             # Como é o próprio objeto instanciado que faz isso, pode usar self.
             print(self.__shop)
-            input() 
+            input()
+        elif command ==3: 
+
+        
+            # busca solicita entrada de tags a localizar
+            search_tags = btc.read_text('Entre com tags a buscar: ')
+            
+            # formata tags
+            search_tags = StockItem.get_tag_set_from_text(search_tags)
+            
+            # Chama metodo de localização de tags
+            itens = self.__shop.find_matching_with_tags(search_tags)
+            
+            # Converte / mapeia dados do objeto em forma de strings
+            stock = map(str,itens)
+            # Extrai dados em forma de string para lista dados extraídos
+            stock_list = '\n'.join(stock)
+            # formta dados para impressão
+            template = '''Match itens
+
+{0}'''      
+            # mostra dados para usuário
+            print (template.format(stock_list))
+            
 
 
 
@@ -923,82 +990,3 @@ Digite sua opção: '''
 
 ui = FashionShopShellApplication('fshop2.pickle')
 ui.main_menu()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Definição dos itens de menu principal
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# testes de classe substituidos pela instrucao print(stock_item) do menu item
-'''
-v = Dress(stock_ref ='d0001', price=10, color='red', pattern='circulos', size='m')
-w = Pants(stock_ref ='d0001', price=10, color='red', pattern='circulos', waist='m', length=10, size='m')
-x = Jeans(stock_ref ='d0001', price=10, color='red', pattern='circulos', waist='m', length=10, style='cut', size='m')
-y = Blouses(stock_ref ='d0001', price=120, color='red', pattern='circulos', style='m', size='m')
-z = Hats(stock_ref ='d0001', price=10, color='red', size='m')
-
-'''
-
-"""
-test_print ='''Teste de impressão de classes)
-
-{0}
-
-{1}
-
-{2}
-
-{3}
-
-{4}'''
-
-print(test_print.format(v,w,x,y,z))
-"""
