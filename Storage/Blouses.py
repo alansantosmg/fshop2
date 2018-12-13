@@ -30,3 +30,5 @@ Size: {3}'''
         # retorna o retorno do metodo str da superclasse e de atributos da subclasse
         return template.format(stock_details, self.pattern, self.style, self.size)
 
+if __name__=='__main__': 
+    pass
