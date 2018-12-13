@@ -6,3 +6,4 @@ shop = FashionShop.FashionShop
 
 app = ui(filename='fshop2.picke', storage_class=shop)
 app.main_menu()
+

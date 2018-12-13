@@ -338,6 +338,3 @@ Digite sua opção: '''
                 print('Shop data saved')
                 break
 
-
-#ui = FashionShopShellApplication('Storage.fshop2.pickle')
-#ui.main_menu()
