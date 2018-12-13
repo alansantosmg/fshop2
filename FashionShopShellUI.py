@@ -12,6 +12,7 @@ shop = FashionShop.FashionShop
 # Diz qual classe de loja vai usar 
 app = ui(filename='fshop2.picke', storage_class=shop)
 
+#
 # Carrega do método do menu principal da classe refernciada FashionShop
 app.main_menu()
 
